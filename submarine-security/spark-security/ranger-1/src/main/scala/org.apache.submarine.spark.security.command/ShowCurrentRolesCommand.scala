@@ -19,12 +19,18 @@
 
 package org.apache.submarine.spark.security.command
 
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.execution.command.RunnableCommand
 
 case class ShowCurrentRolesCommand() extends RunnableCommand {
   override def run(sparkSession: SparkSession): Seq[Row] = {
     throw new UnsupportedOperationException("SHOW CURRENT ROLES")
+  }
+
+  override protected def withNewChildrenInternal(newChildren: IndexedSeq[LogicalPlan]): LogicalPlan = {
+    throw new UnsupportedOperationException("SHOW CURRENT ROLES")
+
   }
 }
 

@@ -24,6 +24,7 @@ object SparkOperationType extends Enumeration {
   type SparkOperationType = Value
 
   val ALTERDATABASE,
+      ALTERDATABASE_LOCATION,
       ALTERTABLE_ADDCOLS,
       ALTERTABLE_ADDPARTS,
       ALTERTABLE_RENAMECOL,

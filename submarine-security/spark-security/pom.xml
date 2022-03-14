@@ -48,8 +48,8 @@
     <ranger.version>1.2.0</ranger.version>
     <ranger.major.version>1</ranger.major.version>
     <spark.compatible.version>2</spark.compatible.version>
-    <scala.version>2.11.8</scala.version>
-    <scala.binary.version>2.11</scala.binary.version>
+    <scala.version>2.12.15</scala.version>
+    <scala.binary.version>2.12</scala.binary.version>
     <scalatest.version>2.2.6</scalatest.version>
     <solr.version>8.4.0</solr.version>
     <spark.version>2.4.7</spark.version>
@@ -583,14 +583,14 @@
     <profile>
       <id>spark-3.0</id>
       <properties>
-        <spark.version>3.0.2</spark.version>
-        <scala.version>2.12.10</scala.version>
+        <spark.version>3.2.1</spark.version>
+        <scala.version>2.12.15</scala.version>
         <scala.binary.version>2.12</scala.binary.version>
         <!--<scalatest.version>3.2.0</scalatest.version>-->
         <spark.compatible.version>3</spark.compatible.version>
-        <commons-lang3.version>3.9</commons-lang3.version>
-        <jackson-databind.version>2.10.5</jackson-databind.version>
-        <jackson-annotations.version>2.10.5</jackson-annotations.version>
+        <commons-lang3.version>3.10</commons-lang3.version>
+        <jackson-databind.version>2.13.1</jackson-databind.version>
+        <jackson-annotations.version>2.13.1</jackson-annotations.version>
       </properties>
     </profile>
 

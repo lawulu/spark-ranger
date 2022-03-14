@@ -201,7 +201,7 @@ object RangerSparkAuthorizer {
             case CREATETABLE | CREATEVIEW | CREATETABLE_AS_SELECT
               if obj.getType == SparkPrivilegeObjectType.TABLE_OR_VIEW =>
               if (isInput) SparkAccessType.SELECT else SparkAccessType.CREATE
-            case ALTERDATABASE | ALTERTABLE_ADDCOLS |
+            case ALTERDATABASE | ALTERDATABASE_LOCATION| ALTERTABLE_ADDCOLS |
                  ALTERTABLE_ADDPARTS | ALTERTABLE_DROPPARTS |
                  ALTERTABLE_LOCATION | ALTERTABLE_PROPERTIES | ALTERTABLE_SERDEPROPERTIES |
                  ALTERVIEW_RENAME | MSCK => SparkAccessType.ALTER

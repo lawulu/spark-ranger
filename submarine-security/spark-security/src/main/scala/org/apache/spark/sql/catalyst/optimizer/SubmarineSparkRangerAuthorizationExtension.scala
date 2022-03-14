@@ -21,7 +21,7 @@ package org.apache.spark.sql.catalyst.optimizer
 
 import org.apache.commons.logging.LogFactory
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.catalyst.plans.logical.{Command, LogicalPlan}
+import org.apache.spark.sql.catalyst.plans.logical.{CacheTable, Command, LogicalPlan, UncacheTable}
 import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.execution.{SubmarineShowDatabasesCommand, SubmarineShowTablesCommand}
 import org.apache.spark.sql.execution.command._
@@ -57,7 +57,7 @@ case class SubmarineSparkRangerAuthorizationExtension(spark: SparkSession)
       case s: SubmarineShowDatabasesCommand => s
       case s: ShowTablesCommand => SubmarineShowTablesCommand(s)
       case s: SubmarineShowTablesCommand => s
-      case ResetCommand => SubmarineResetCommand
+      case ResetCommand(_) => SubmarineResetCommand
       case _ =>
         val operationType: SparkOperationType = toOperationType(plan)
         val (in, out) = PrivilegesBuilder.build(plan)
@@ -90,11 +90,13 @@ case class SubmarineSparkRangerAuthorizationExtension(spark: SparkSession)
     plan match {
       case c: Command => c match {
         case _: AlterDatabasePropertiesCommand => ALTERDATABASE
+        case _: AlterDatabaseSetLocationCommand => ALTERDATABASE_LOCATION
         case p if p.nodeName == "AlterTableAddColumnsCommand" => ALTERTABLE_ADDCOLS
         case _: AlterTableAddPartitionCommand => ALTERTABLE_ADDPARTS
         case p if p.nodeName == "AlterTableChangeColumnCommand" => ALTERTABLE_RENAMECOL
         case _: AlterTableDropPartitionCommand => ALTERTABLE_DROPPARTS
-        case _: AlterTableRecoverPartitionsCommand => MSCK
+        case _: RepairTableCommand => MSCK
+        case _: PartitionStatistics => MSCK //TODO??
         case _: AlterTableRenamePartitionCommand => ALTERTABLE_RENAMEPART
         case a: AlterTableRenameCommand => if (!a.isView) ALTERTABLE_RENAME else ALTERVIEW_RENAME
         case _: AlterTableSetPropertiesCommand
@@ -117,7 +119,7 @@ case class SubmarineSparkRangerAuthorizationExtension(spark: SparkSession)
              | _: CreateDataSourceTableCommand => CREATETABLE
         case _: CreateTableLikeCommand => CREATETABLE
         case _: CreateViewCommand
-             | _: CacheTableCommand
+             | _: CacheTable
              | _: CreateTempViewUsing => CREATEVIEW
 
         case p if p.nodeName == "DescribeColumnCommand" => DESCTABLE
@@ -158,7 +160,7 @@ case class SubmarineSparkRangerAuthorizationExtension(spark: SparkSession)
 
         case _: TruncateTableCommand => TRUNCATETABLE
 
-        case _: UncacheTableCommand => DROPVIEW
+        case _: UncacheTable => DROPVIEW
 
         // Commands that do not need build privilege goes as explain type
         case _ =>
